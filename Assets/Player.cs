@@ -4,7 +4,8 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player : NetworkBehaviour {
+public class Player : NetworkBehaviour
+{
 
   [SerializeField] GameObject paddle;
   [SerializeField] GameObject net;
@@ -19,20 +20,25 @@ public class Player : NetworkBehaviour {
   Quaternion originalRotationValue;
   float currentRotation = 0f;
 
-  public override void OnStartAuthority() {
+  public override void OnStartAuthority()
+  {
     base.OnStartAuthority();
     paddleRB = paddle.GetComponent<Rigidbody2D>();
     paddleStartPoint = paddle.transform.localPosition;
     originalRotationValue = paddle.transform.rotation;
   }
-  void FixedUpdate() {
-    if (isLocalPlayer) {
+  void FixedUpdate()
+  {
+    if (isLocalPlayer)
+    {
       var horiz = Input.GetAxisRaw("Horizontal");
 
       // no input -- clear
-      if (Mathf.Abs(horiz) <= Mathf.Epsilon) {
+      if (Mathf.Abs(horiz) <= Mathf.Epsilon)
+      {
         // clear rotation
-        if (currentRotation != 0f) {
+        if (currentRotation != 0f)
+        {
           // paddle.transform.Rotate(0, 0, 0, Space.Self);
           paddle.transform.rotation = Quaternion.Slerp(paddle.transform.rotation, originalRotationValue, Time.time * paddleRotationSpeed);
           currentRotation = 0;
@@ -45,10 +51,10 @@ public class Player : NetworkBehaviour {
       paddle.transform.localPosition = new Vector2(paddle.transform.localPosition.x + xDelta, paddleStartPoint.y);
 
 
-      if (paddleRotationSpeed > 0 && Mathf.Abs(currentRotation) < maxRotation) {
+      if (paddleRotationSpeed > 0 && Mathf.Abs(currentRotation) < maxRotation)
+      {
         float rotDelta = (float)horiz * paddleRotationSpeed * Time.deltaTime * -1;
         paddle.transform.Rotate(0, 0, rotDelta, Space.Self);
-
         currentRotation += rotDelta;
       }
     }
